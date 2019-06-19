@@ -34,27 +34,38 @@ void process_image_callback(const sensor_msgs::Image img)
     // Depending on the white ball position, call the drive_bot function and pass velocities to it
     // Request a stop when there's no white ball seen by the camera
     
-    for (int i = 0; i < img.height; i++){
-        for (int j=0; j < img.width; j++){
+    
+    //ROS_INFO_STREAM("TEST");  
+    
+    for (int j=0; j < img.width; j++){
+        for (int i = 0; i <img.height; i++){
             int pixel = 3*j + img.step*i; 
             if (img.data[pixel] == white_pixel & img.data[pixel+1] == white_pixel & img.data[pixel+2] == white_pixel) {
                 //ROS_INFO_STREAM(std::to_string(j));  
-                //ROS_INFO_STREAM("TEST");         
+                ROS_INFO_STREAM("TEST");     
+
+		        // measure how far through the image we have found the ball to be.
+		
+		        float location = (float(j) / float(img.width)) *2.0 - 1.0;
+		        
+                ROS_INFO_STREAM(std::to_string(location));    
+		        
+		        drive_robot(0.5, -location);
                 
-                if ((float(j) / float(img.width)) < (1./3.)){
-                    drive_robot(0.0, 0.5);
-                } else if ((float(j) / float(img.width)) > (2./3.)){
-                    drive_robot(0.0, -0.5);
-                } else {
-                    drive_robot(0.5, 0.0);
-                }
+//                if ((float(j) / float(img.width)) < (1./3.)){
+//                    drive_robot(0.0, 0.5);
+//                } else if ((float(j) / float(img.width)) > (2./3.)){
+//                    drive_robot(0.0, -0.5);
+//                } else {
+//                    drive_robot(0.5, 0.0);
+//                }
                 
                 flag_no_found_ball = false;
                 break;
             }
         }
     }
-    
+        
     if (flag_no_found_ball) {
         drive_robot(0.0, 0.0);    
     } 

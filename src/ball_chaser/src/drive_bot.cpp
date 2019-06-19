@@ -24,8 +24,8 @@ bool handle_drive_request(ball_chaser::DriveToTarget::Request& req,
 	motor_command_publisher.publish(motor_command);
 
     // Return a response message
-    //res.msg_feedback = "linear x: " + std::to_string((float)req.linear_x) + " , angular z: " + std::to_string((float)req.angular_z);
-    //ROS_INFO_STREAM(res.msg_feedback);
+    res.msg_feedback = "linear x: " + std::to_string((float)req.linear_x) + " , angular z: " + std::to_string((float)req.angular_z);
+    ROS_INFO_STREAM(res.msg_feedback);
 
     return true;
 }
